@@ -66,7 +66,7 @@ const orderSummery = () => {
         })),
       };
 
-      const { data } = await axios.post("/order/placeOrder", orderData);
+      const { data } = await axios.post("/api/order/placeOrder", orderData);
       if (data.success) {
         toast.success(data.message);
         navigate("/success");

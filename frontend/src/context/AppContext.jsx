@@ -24,7 +24,7 @@ export const AppContextProvider = ({ children }) => {
 
   const fetchAdmin = async () => {
     try {
-      const { data } = await axios.get("/admin/auth");
+      const { data } = await axios.get("api/admin/auth");
       if (data.success) {
         setIsAdmin(true);
       } else {
@@ -111,7 +111,7 @@ export const AppContextProvider = ({ children }) => {
 
     const fetchOrders=async()=>{
       try {
-        const {data} = await axios.get('/order/orders')
+        const {data} = await axios.get('/api/order/orders')
         setOrders(data.orders)
       } catch (error) {
         console.log(error)
@@ -121,7 +121,7 @@ export const AppContextProvider = ({ children }) => {
     // Fetch products from backend
     const fetchProducts = async () => {
         try {
-            const { data } = await axios.get("/product/getAll");
+            const { data } = await axios.get("/api/product/getAll");
             setProducts(data.products);
         } catch (error) {
             console.log(error);

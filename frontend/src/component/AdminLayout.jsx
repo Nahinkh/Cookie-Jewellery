@@ -6,7 +6,7 @@ const AdminLayout = () => {
   const{axios,setIsAdmin,navigate}= useAppContext()
 
       const logout = async() => {
-        const {data} = await axios.get('/admin/logout');
+        const {data} = await axios.get('/api/admin/logout');
         if(data.success){
             setIsAdmin(false);
             navigate("/");

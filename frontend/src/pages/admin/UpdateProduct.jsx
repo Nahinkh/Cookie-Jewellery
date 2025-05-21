@@ -68,7 +68,7 @@ const UpdateProduct = () => {
 
       console.log(formData.get("productData"));
       console.log(formData.getAll("images"));
-      const{data}= await axios.put(`/product/update/${id}`, formData);
+      const{data}= await axios.put(`/api/product/update/${id}`, formData);
       if(data.success){
         toast.success(data.message);
         navigate("/admin/product-list");

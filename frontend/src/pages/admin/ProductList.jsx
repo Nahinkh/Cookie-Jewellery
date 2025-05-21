@@ -7,7 +7,7 @@ const ProductList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`/product/delete/${id}`);
+      const { data } = await axios.delete(`/api/product/delete/${id}`);
       if (data.success) {
         toast.success(data.message);
         // Fetch products again to update the list

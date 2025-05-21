@@ -12,7 +12,7 @@ const AdminLogin = () => {
     try {
       e.preventDefault();
       setIsLoading(true);
-      const{data} = await axios.post("/admin/login", {email, password});
+      const{data} = await axios.post("/api/admin/login", {email, password});
       if (data.success) {
                 setIsAdmin(true);
         toast.success(data.message);
