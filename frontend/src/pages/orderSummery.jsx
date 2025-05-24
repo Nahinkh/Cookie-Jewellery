@@ -12,7 +12,11 @@ const orderSummery = () => {
     axios,
     isLoading,
     setIsLoading,
+    getShippingFee,
+    shippingZone,
+  totalAmount
   } = useAppContext();
+  console.log(getShippingFee());
   const [address, setAddress] = useState({
     name: "",
     mobile: "",
@@ -22,6 +26,7 @@ const orderSummery = () => {
   const [paymentMethod, setPaymentMethod] = useState("COD");
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
     setAddress((prev) => ({
       ...prev,
@@ -29,9 +34,14 @@ const orderSummery = () => {
       paymentMethod: paymentMethod,
     }));
   };
+  console.log(shippingZone)
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      if (getShippingFee()===0){
+         toast.error("Please select a shipping zone");
+        return navigate("/cart")
+      }
       setIsLoading(true);
 
       if (
@@ -58,11 +68,16 @@ const orderSummery = () => {
         email: address.email,
         address: address.address,
         paymentMethod: paymentMethod,
+        shippingZone: shippingZone,
+        totalAmount: totalAmount,      
         items: cartItems.map((item) => ({
           productId: item._id,
           productName: item.productName,
           quantity: item.quantity,
           price: item.offerPrice,
+          selectedSizes: item.selectedSizes ,
+          selectedColors: item.selectedColors,
+          
         })),
       };
 
@@ -157,39 +172,22 @@ const orderSummery = () => {
             {paymentMethod === "COD" ? "Place Order" : "Pay Now"}
           </button>
         </form>
-        <div className="flex flex-col items-center w-full">
-          <div className="bg-gray-50/50 p-6 rounded-xl shadow-sm mb-6 w-[350px] md:w-[400px] mt-10">
-            <div className="mb-4">
-              <label className="block text-gray-600 mb-2">
-                Select Payment Method
-              </label>
-              <select
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                value={paymentMethod}
-                className="w-full px-4 py-2 border border-action rounded-xl outline-none"
-              >
-                <option value="COD">Cash on Delivery</option>
-              </select>
+          <div className="max-w-[360px] w-full bg-gray-50 border border-gray-200 p-6 rounded-md shadow-sm mt-10 md:mt-0 md:ml-8">
+          <h2 className="text-xl font-medium mb-4">Order Summary</h2>
+        
+          <div className="text-gray-700 space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span>Subtotal:</span>
+              <span>BDT {Math.round(cartTotalAmount())}</span>
             </div>
-          </div>
-          <div className="bg-gray-50/50 p-6 rounded-xl shadow-sm mb-6 w-[350px] md:w-[400px] ">
-            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-            <p className="flex justify-between">
-              <span>Price:</span>
-              <span>${cartTotalAmount()}</span>
-            </p>
-            <p className="flex justify-between">
+            <div className="flex justify-between">
               <span>Shipping Fee:</span>
-              <span className="text-green-600">Free</span>
-            </p>
-            <p className="flex justify-between">
-              <span>Tax (2%):</span>
-              <span className="text-green-600">Free</span>
-            </p>
-            <p className="flex justify-between text-lg font-medium mt-3">
-              <span>Total Amount:</span>
-              <span>${Math.round(cartTotalAmount())}</span>
-            </p>
+              <span className="text-blue-600">BDT {getShippingFee()}</span>
+            </div>
+            <div className="flex justify-between border-t pt-2 font-semibold text-base">
+              <span>Total:</span>
+              <span>BDT {totalAmount}</span>
+            </div>
           </div>
         </div>
       </div>

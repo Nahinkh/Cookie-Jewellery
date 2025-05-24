@@ -25,11 +25,11 @@ const s = () => {
     setIsLoading(true);
     const productData = {
       productName,
-      productDescription,
+      productDescription: productDescription.split("\n"),
       productCategory,
       productPrice,
       offerPrice,
-      color: color.split(" "),
+      color: color.split(","),
       size: size.split(","),
       inStock: true,
       isNewArrival,
@@ -66,6 +66,7 @@ const s = () => {
     setIsLoading(false);
    }
   };
+
 
   return (
     <div className="py-10 flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between no-scrollbar ">
@@ -250,7 +251,7 @@ const s = () => {
             />
           </div>
         </div>
-        <button className="px-8 py-2.5 bg-action text-white font-medium rounded">
+        <button className="px-8 py-2.5 bg-action text-white font-medium rounded cursor-pointer">
           ADD Product
         </button>
       </form>

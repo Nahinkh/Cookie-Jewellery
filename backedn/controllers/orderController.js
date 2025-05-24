@@ -18,6 +18,7 @@ export const placeOrders = async (req, res) => {
       totalAmount += item.price * item.quantity;
     });
     orderData.amount = totalAmount;
+    console.log("orderData", orderData);
     await Order.create(orderData);
     res.status(200).json({
       success: true,
@@ -30,7 +31,7 @@ export const placeOrders = async (req, res) => {
 
 export const getOrders =async (req,res)=>{
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().sort({_id:-1});
  res.status(200).json({
             success: true,
             orders,
@@ -40,4 +41,26 @@ export const getOrders =async (req,res)=>{
   }
 }
 
+
+// update order status: api/order/update/:id
+export const updateOrderStatus = async (req, res) => {
+  const{id} = req.params;
+    const { orderStatus } = req.body;
+    console.log("id, orderStatus", id, orderStatus);
+  // const orderStatus = status;  
+  try {
+    await Order.findByIdAndUpdate(id,{
+        orderStatus: orderStatus,
+      })
+    res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+    });
+    
+
+  } catch (error) {
+    console.log(error.message);
+  }
+
+}
 

@@ -3,13 +3,15 @@ import { useParams } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import placeholder from "../../assets/placeholder.jpg";
 import toast from "react-hot-toast";
+import Loader from "../../component/Loader";
 
 const UpdateProduct = () => {
   const { id } = useParams();
- 
-  const { axios, navigate, products } = useAppContext();
-  const product = products.find((item) => item._id === id);
 
+  const { axios, navigate, products,isLoading,setIsLoading } = useAppContext();
+  const product = products.find((item) => item._id === id);
+  console.log(product)
+  const [existingImages, setExistingImages] = useState(product.image?product.image : []);
 
   const [files, setFiles] = useState([]);
   const [productName, setProductName] = useState(
@@ -37,21 +39,21 @@ const UpdateProduct = () => {
     product.isTrending ? product.isTrending : false
   );
   const [color, setColor] = useState(
-    product.color ? product.color.join(" ") : ""
+    product.color ? product.color.join(",") : ""
   );
   const [size, setSize] = useState(product.size ? product.size.join(",") : "");
-
 
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const productData = {
         productName,
         productDescription,
         productCategory,
         productPrice,
         offerPrice,
-        color: color.split(" "),
+        color: color.split(","),
         size: size.split(","),
         inStock: true,
         isNewArrival,
@@ -60,28 +62,34 @@ const UpdateProduct = () => {
       };
       const formData = new FormData();
       formData.append("productData", JSON.stringify(productData));
-      console.log(productData);
-
-      for (let i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
+      const hashNewImage = files.some((file) => file !== undefined);
+      if (hashNewImage) {
+        files.forEach((file) => {
+          if (file) {
+            formData.append('images', file);
+          }
+        }
+      );
       }
-
-      console.log(formData.get("productData"));
-      console.log(formData.getAll("images"));
-      const{data}= await axios.put(`/api/product/update/${id}`, formData);
-      if(data.success){
+      console.log("Form Data:", formData.getAll("images"));
+      const { data } = await axios.put(`/api/product/update/${id}`, formData);
+      if (data.success) {
         toast.success(data.message);
         navigate("/admin/product-list");
       }
-
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+    }finally{
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="py-10 flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between no-scrollbar ">
+      {
+        isLoading? <Loader/> :(
+              
       <form
         onSubmit={onSubmitHandler}
         className="md:p-10 p-4 space-y-5 max-w-lg"
@@ -89,16 +97,21 @@ const UpdateProduct = () => {
         <div>
           <p className="text-base font-medium">Previous Image</p>
           <div className="flex flex-wrap items-center gap-3 mt-2">
-            {product.image.map((itm) => (
-              <label key={itm} htmlFor={`image${itm}`}>
-                <img
-                  className="max-w-24 cursor-pointer rounded"
-                  src={itm}
-                  alt="uploadArea"
-                  width={100}
-                  height={100}
-                />
-              </label>
+            {existingImages.map((imgUrl, index) => (
+              <div key={index} className="relative group">
+                <img src={imgUrl} alt="existing" className="max-w-24 rounded" />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExistingImages(
+                      existingImages.filter((_, i) => i !== index)
+                    )
+                  }
+                  className="absolute top-0 right-0 bg-red-500 text-white px-1 py-0.5 text-xs rounded opacity-80 group-hover:opacity-100"
+                >
+                  ✕
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -195,7 +208,6 @@ const UpdateProduct = () => {
             <input
               type="checkbox"
               checked={isFeatured}
-            
               onChange={() => setIsFeatured(!isFeatured)}
             />
             Featured
@@ -275,10 +287,12 @@ const UpdateProduct = () => {
             />
           </div>
         </div>
-        <button className="px-8 py-2.5 bg-indigo-500 text-white font-medium rounded">
+        <button className="px-8 py-2.5 bg-action text-white font-medium rounded cursor-pointer">
           Update
         </button>
       </form>
+        ) 
+      }
     </div>
   );
 };

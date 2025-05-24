@@ -18,6 +18,7 @@ import UpdateProduct from "./pages/admin/UpdateProduct"
 import AOS from "aos"
 import "aos/dist/aos.css";
 import { useEffect } from "react"
+import 'swiper/css';
 
 
 
@@ -27,7 +28,7 @@ import { useEffect } from "react"
 function App() {
   const { isAdmin } = useAppContext();
   const isAdminPath = window.location.pathname.includes("/admin")
-  const location = useLocation();
+  const {pathname} = useLocation();
 
   useEffect(() => {
     AOS.init({ duration: 2000, once: false });
@@ -35,8 +36,9 @@ function App() {
 
    useEffect(() => {
     AOS.refresh();
-    window.scrollTo(0, 0); // optional: scroll to top on route change
-  }, [location]);
+     // optional: scroll to top on route change
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
