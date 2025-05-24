@@ -3,7 +3,6 @@ import { useAppContext } from "../context/AppContext";
 import { Link, useParams } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import { categories } from "../assets/assests";
-import { Helmet } from "react-helmet-async";
 
 const ProductDetails = () => {
   const { products, navigate, addToCart, cartItems } = useAppContext();
@@ -37,15 +36,6 @@ console.log("Initialized size:", size);
   return (
     product && (
       <div className=" w-full px-6 mt-16 mb-10 lg:px-16 mx-auto ">
-        <Helmet>
-          <title>{product.productName} | Cookie Jewellery</title>
-          <meta
-            name="description"
-            content={`Discover the exquisite ${product.productName} from Cookie Jewellery. Perfect for any occasion, this piece combines elegance and style.`}
-          />
-          <link rel="canonical" href={`/product/${product._id}`} />
-          <meta property="og:title" content={product.productName} />
-        </Helmet>
         <div className="flex flex-col items-start justify-start w-full max-w-4xl mx-auto">
           <p>
             <Link to="/">Home</Link> /<Link to="/all-products"> Products</Link>{" "}

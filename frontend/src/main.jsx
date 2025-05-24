@@ -4,15 +4,11 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AppContextProvider } from "./context/AppContext.jsx";
 import { Toaster } from "react-hot-toast";
-import { HelmetProvider } from "react-helmet-async";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AppContextProvider>
-      
-      <HelmetProvider>
-<App />     
-      </HelmetProvider>
+      <App />
       <Toaster />
     </AppContextProvider>
   </BrowserRouter>

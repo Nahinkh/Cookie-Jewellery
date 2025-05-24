@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import ProductCard from "../component/ProductCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Helmet } from "react-helmet-async";
+
 
 const AllProduct = () => {
   const { products, searchQuery } = useAppContext();
@@ -24,11 +24,6 @@ const AllProduct = () => {
 
   return (
   <div className="mt-16 mb-10 px-6 md:px-10 lg:px-16 flex flex-col w-full">
-    <Helmet>
-    <title>All Products | Cookie Jewellery</title>
-    <meta name="description" content="Explore our complete collection of exquisite jewellery at Cookie Jewellery. Find the perfect piece to complement your style." />
-    <link rel="canonical" href="/all-products" />
-    </Helmet>
   <div className="flex flex-col items-start sm:items-end w-full">
     <p className="text-2xl font-medium uppercase text-gray-800">
       All Products
